@@ -18,11 +18,19 @@ jobs:
             pushplus_token: PUSHPLUS_TOKEN
             serverchan_key: SERVERCHAN_KEY
     steps:
-      - name: Working
-        uses: liangliangsheng/caomeidahuazhu
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: 'Set up Python'
+        uses: actions/setup-python@v2
         with:
-          username: ${{ secrets[matrix.username] }}
-          password: ${{ secrets[matrix.password] }}
-          dingtalk_token: ${{ secrets[matrix.dingtalk_token] }}
-          pushplus_token: ${{ secrets[matrix.pushplus_token] }}
-          serverchan_key: ${{ secrets[matrix.serverchan_key] }}
+          python-version: 3.9
+      - name: 'Install requirements'
+        run: pip3 install -r ./requirements.txt
+      - name: Working
+        env:
+          USERNAME: ${{ secrets[matrix.username] }}
+          PASSWORD: ${{ secrets[matrix.password] }}
+          DINGTALK_TOKEN: ${{ secrets[matrix.dingtalk_token] }}
+        run: |
+          python3 ./hitcarder.py
+        shell: bash
